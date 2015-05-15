@@ -1,4 +1,6 @@
 import pygame
+import mpmath
+import math
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -16,18 +18,43 @@ done = False
 
 clock = pygame.time.Clock()
 
+actual_surface = pygame.display.get_surface()
+cell_x = actual_surface.get_width()/2
+cell_y = actual_surface.get_height()/2
+max_x = actual_surface.get_width()
+max_y = actual_surface.get_height()
+
+velocity = 10
+
 while not done:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            done = True
+            done = True 
 
-    actual_surface = pygame.display.get_surface()
-    center_x = actual_surface.get_width()/2
-    center_y = actual_surface.get_height()/2
+    mouse_pos = pygame.mouse.get_pos()
+    dir_x = mouse_pos[0] - cell_x
+    dir_y = mouse_pos[1] - cell_y
+
+    diff_x = math.fabs(cell_x-mouse_pos[0])
+    diff_y = math.fabs(cell_y-mouse_pos[1])
+
+    distance = math.sqrt( (diff_x)**2 + (diff_y)**2 )
+    increment_x = velocity*math.sin( diff_x/distance )
+    increment_y = velocity*math.cos( diff_x/distance )
+    if dir_x > 0:
+        cell_x = cell_x + increment_x
+    else:
+        cell_x = cell_x - increment_x
+
+    if dir_y > 0:
+        cell_y = cell_y + increment_y
+    else:
+        cell_y = cell_y - increment_y
+
 
     screen.fill(WHITE)
-    pygame.draw.circle(screen, GREEN, (center_x, center_y), 50, 0)
+    pygame.draw.circle(screen, GREEN, ( int(cell_x), int(cell_y) ), 50, 0)
 
     pygame.display.flip()
 
