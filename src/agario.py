@@ -24,7 +24,7 @@ cell_y = actual_surface.get_height()/2
 max_x = actual_surface.get_width()
 max_y = actual_surface.get_height()
 
-velocity = 10
+velocity = 1
 
 while not done:
 
